@@ -26,9 +26,6 @@ const handleSort = () => {
 }
 
 
-const handleGetRecords = () => {
-  dispatch(getAllRecords())
-}
 
 
 useEffect(() => {

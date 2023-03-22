@@ -61,14 +61,14 @@ function App() {
 
   useEffect(() => {
   if(token){
-    dispatch(getUserData())
+    dispatch(getUserData());
+    dispatch(getAllRecords());
+
   }
   colorModes.toggleColorMode();
   
   
   }, [])
-  
- 
 
   return (
   
