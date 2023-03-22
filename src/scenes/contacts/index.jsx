@@ -12,10 +12,8 @@ import { useSelector } from "react-redux";
 const Contacts = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const {students} = useSelector(({dataReducer}) => dataReducer)
+  const {members} = useSelector(({dataReducer}) => dataReducer)
   const [selected, setSelected] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [dialog, setDialog] = useState(false);
 
   const columns = [
     {
@@ -31,7 +29,7 @@ const Contacts = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "phone",
+      field: "contact",
       headerName: "Phone Number",
       flex: 1,
     },
@@ -40,34 +38,24 @@ const Contacts = () => {
       headerName: "Email",
       flex: 1,
     },
-    { field: "code", headerName: "Registrar ID" }
-    
+    { field: "membershipFee", headerName: "Membership" },
+    { field: "createdAt", headerName: "Created Date" }
   ];
 
   const handleClick = (e) => {
     setSelected(e.row)
-    setOpen(true)
   }
   
 
-  
-  
-  const handleClose = () => {
-        setOpen(false)
-        setSelected(null)
-    
-  }
-  
+  console.log(selected)
 
   
   return (
     <Box m="20px">
-    <QrCode value={selected} open={open} setOpen={handleClose}/>
       <Header
-        title="STUDENTS"
-        subtitle="List of Students Reference"
+        title="MEMBERS"
+        subtitle="List of Members Details"
       />
-    <FormDialog open={dialog} setOpen={setDialog} />
       
       <Box
         m="40px 0 0 0"
@@ -102,7 +90,7 @@ const Contacts = () => {
         }}
       >
         <DataGrid
-          rows={students}
+          rows={members}
           columns={columns}
           density="compact"
           components={{ Toolbar: GridToolbar }}

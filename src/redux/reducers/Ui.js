@@ -1,120 +1,96 @@
-import {SET_CREATE_CUSTOMER_DIALOG, SET_OPTIONS, SET_USER_DIALOG, SET_STORE_DIALOG, SET_UI, CLEAR_CART, SET_CART_SUCCESS, SET_NOTIFICATIONS, SET_NOTIF_COUNT, SET_DRAWER_OPEN, SET_ACTIVE_OPTION, SET_ACTION, SET_EXPENSE_DIALOG, SET_LOADING, STOP_LOADING} from "../actions/types";
+import { SET_LOADING, STOP_LOADING, SET_ERRORS, CLEAR_ERRORS, SET_FILTER, RESIZE, SET_MESSAGE, CLEAR_MESSAGE, SET_ACTIVE_NODE, OPEN_MEMBERFORM, CLOSE_MEMBERFORM} from "../actions/types";
 
 const INIT_STATE = {
-    createCustomerDialog: false,
-    notifications: [],
-    notifCount: 0,
-    action: 'cart',
-    activeOption: 'cart',
-    viewMode: 'order',
-    isDrawerOpen: false,
-    cartSuccess: null,
-    userDialog: false,
-    expenseDialog: false,
-    autoCompleteProducts: [],
-    autoCompleteCustomers: [],
-    options: [],
-    loading: false
+    loading: false,
+    errors: {},
+    height: window.innerHeight - 42,
+    filter: "",
+    width: window.innerWidth - 16,
+    activeNode: null,
+    snackbar: {
+      message: "",
+      open: false,
+      type: ''
+    },
+    memberForm: false
 };
 
 export default (state = INIT_STATE, action) => {
   const {type, payload} = action;
 
   switch (type) {
-    case SET_UI: {
-      return {
-        ...state,
-        ...payload
-      };
-    }
-
-    case SET_OPTIONS: {
-      return {
-        ...state,
-        options: payload
-      };
-    }
-
-    case SET_USER_DIALOG: {
-      return {
-        ...state,
-        userDialog: payload ? true : false
-      };
-    }
-
+    case SET_ERRORS: {
+      let message = null;
+      Object.values(payload).forEach(a => {
+          message = a
+       })
     
-    case SET_EXPENSE_DIALOG: {
       return {
         ...state,
-        expenseDialog: payload ? true : false
+        errors: payload,
+        snackbar: { open: true, message, type: 'error' }
       };
     }
-
-    case SET_STORE_DIALOG: {
+    
+    case SET_MESSAGE: {
+      return {
+        ...state, 
+        snackbar: { open: true, ...payload }
+      }
+    }
+    
+    case CLEAR_MESSAGE: {
+      return {
+        ...state, 
+        snackbar: { open: false, message: "", type: ""}
+      }
+    }
+    
+    case SET_FILTER: {
       return {
         ...state,
-        storeDialog: payload ? true : false
+        filter: payload
       };
     }
-
-    case SET_CREATE_CUSTOMER_DIALOG: {
+    
+    case RESIZE: {
       return {
         ...state,
-        createCustomerDialog: payload ? true : false
+        height:  window.innerHeight - document.getElementById('header') ? document.getElementById('header').offsetHeight : 0 - 16,
+        width: window.innerWidth - 16
       };
     }
-
-    case SET_NOTIF_COUNT: {
+    
+    case SET_ACTIVE_NODE: {
       return {
         ...state,
-        notifCount: payload !== 0 ? state.notifCount++ : 0
+          activeNode: payload
       };
     }
-  
-
-    case SET_NOTIFICATIONS: {
+    
+    case OPEN_MEMBERFORM: {
+    
       return {
         ...state,
-       ...payload
+        memberForm: true
       };
     }
-
-    case SET_DRAWER_OPEN: {
+    case CLOSE_MEMBERFORM: {
+    
       return {
         ...state,
-        isDrawerOpen: payload
+        memberForm: false
       };
     }
-
-    case CLEAR_CART: {
+    
+   
+    case CLEAR_ERRORS: {
       return {
         ...state,
-        action: 'cart',
-        activeOption: 'cart',
-        cartSuccess: null
+        errors: {}
       };
     }
-
-    case SET_CART_SUCCESS: {
-      return {
-        ...state,
-        cartSuccess: payload
-      };
-    }
-
-    case SET_ACTION: {
-      return {
-        ...state,
-        action: payload
-      };
-    }
-
-    case SET_ACTIVE_OPTION: {
-      return {
-        ...state,
-        activeOption: payload
-      };
-    }
+    
     
 
     case SET_LOADING: {

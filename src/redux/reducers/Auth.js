@@ -1,4 +1,4 @@
-import { SEND_FORGET_PASSWORD_EMAIL, UPDATE_AUTH_USER, UPDATE_LOAD_USER, CLEAR_USER } from '../actions/types';
+import { SEND_FORGET_PASSWORD_EMAIL, UPDATE_AUTH_USER, UPDATE_LOAD_USER, CLEAR_USER, SET_AUTHENTICATED } from '../actions/types';
 
 const INIT_USER = {
   contacts: [],
@@ -6,24 +6,31 @@ const INIT_USER = {
 }
 
 const INIT_STATE = {
+  isAuthUser: false,
   authUser: INIT_USER,
   loadUser: false,
-  isAdmin: false,
   send_forget_password_email: false
 };
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
     case UPDATE_AUTH_USER: {
-      let { roles } = action.payload ? action.payload : {};
-      let adm = roles && roles.find(a => String(a.name).includes('super') || String(a.name).includes('admin'));
       return {
         ...state,
         authUser: {...INIT_USER, ...action.payload},
         loadUser: true,
-        isAdmin: adm ? true : false
       };
     }
+    
+    case SET_AUTHENTICATED: {
+      return {
+        ...state,
+        isAuthUser: true,
+        loadUser: true,
+      };
+    }
+    
+    
     case UPDATE_LOAD_USER: {
       return {
         ...state,
@@ -41,6 +48,7 @@ export default (state = INIT_STATE, action) => {
         ...state,
         authUser: INIT_USER,
         loadUser: false,
+        isAuthUser: false,
         isAdmin: false
       };
     }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -18,8 +18,11 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import { ExitToApp } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/actions/Auth";
 
-const Item = ({ title, to, icon, selected, setSelected }) => {
+const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -28,7 +31,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       style={{
         color: colors.grey[100],
       }}
-      onClick={() => setSelected(title)}
+      onClick={(e) => { setSelected(title); onClick && onClick(e)}}
       icon={icon}
     >
       <Typography>{title}</Typography>
@@ -40,11 +43,31 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const Sidebar = ({isCollapsed, setIsCollapsed, setSelected, selected}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const dispatch = useDispatch();
+  let params = useParams();
 
   const handleSelect = (val) => {
     setIsCollapsed(true)
     setSelected(val)
   }
+  
+  
+  const handleLogout = () => {
+  console.log('LOGOUT')
+     dispatch(logout())
+  }
+  
+  
+  useEffect(() => {
+      let loc = params['*'];
+  console.log(loc)
+    setSelected(loc ? String(loc).toUpperCase() : "DASHBOARD")
+    
+    
+  
+  
+  }, [])
+  
 
   return (
     <Box
@@ -110,7 +133,7 @@ const Sidebar = ({isCollapsed, setIsCollapsed, setSelected, selected}) => {
 
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
-              title="Dashboard"
+              title="DASHBOARD"
               to="/"
               icon={<HomeOutlinedIcon />}
               selected={selected}
@@ -139,16 +162,24 @@ const Sidebar = ({isCollapsed, setIsCollapsed, setSelected, selected}) => {
               setSelected={handleSelect}
             /> */}
               <Item
-              title="Members Queue"
-              to="/members-que"
+              title="MEMBERS"
+              to="/members"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={handleSelect}
             />
               <Item
-              title="Genealogy Tree"
-              to="/genealogy-tree"
+              title="GENEALOGY"
+              to="/genealogy"
               icon={<AccountTreeIcon />}
+              selected={selected}
+              setSelected={handleSelect}
+            />
+              <Item
+              title="Logout"
+              to="/signin"
+              onClick={() => handleLogout()}
+              icon={<ExitToApp />}
               selected={selected}
               setSelected={handleSelect}
             />

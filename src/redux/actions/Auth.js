@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { SEND_FORGET_PASSWORD_EMAIL, UPDATE_AUTH_USER, UPDATE_AUTH_STORE, UPDATE_LOAD_USER, CLEAR_USER, SET_DASHBOARD_DATA, SET_LOADING, STOP_LOADING } from './types';
-import { fetchError, fetchStart, fetchSuccess } from './Common';
+import { SEND_FORGET_PASSWORD_EMAIL, UPDATE_AUTH_USER, UPDATE_LOAD_USER, CLEAR_USER,  SET_ERRORS, CLEAR_ERRORS, SET_AUTHENTICATED  } from './types';
 
-import commonData from '../../utils/commonData';
-import { authHeader } from '../../services/auth-header';
+import {BUBU_API_URL } from '../../commonData';
+import { authHeader } from '../auth-header';
 
 
 export const setAuthUser = user => {
@@ -15,17 +14,7 @@ export const setAuthUser = user => {
   };
 };
 
-export const setAuthStore = store => {
-  return dispatch => {
-    dispatch({
-      type: UPDATE_AUTH_STORE,
-      payload: store,
-    });
-  };
-};
-
 export const updateLoadUser = loading => {
-
   return dispatch => {
     dispatch({
       type: UPDATE_LOAD_USER,
@@ -43,96 +32,102 @@ export const setForgetPassMailSent = status => {
   };
 };
 
-export const loginUser = (user, callbackFun) => {
-  return dispatch => {
-    dispatch(fetchStart());
-    const ot = setTimeout(() => {
-      dispatch(fetchError('Connection timeout!'));
-    }, 30000);
-
-    axios
-      .post(`${commonData.apiUrl}/auth/signin`, user)
-      .then(data => {
-        let { accessToken} = data.data;
-          localStorage.setItem('idToken', accessToken);
-          dispatch(getUserData());
-          clearTimeout(ot);
-          dispatch(fetchSuccess());
-
-          if (callbackFun) callbackFun(data.data);
+export const registerUser = (user, rid) => dispatch => {
+  dispatch({type: CLEAR_ERRORS})
+  return axios
+      .post(`${BUBU_API_URL}/auth/signup?rid=${rid}`, user)
+      .then(({data}) => {
+        // let { token } = data;
+          // dispatch({type: UPDATE_AUTH_USER, payload: data })
+          // localStorage.setItem('idToken', token);
+          return window.location.href = '/login'
       })
-      .catch(error => {
-        console.log(error)
-        clearTimeout(ot);
-        let { message } = error?.response?.data;
-        dispatch(fetchError(message.text));
+      .catch(({response}) => {
+        // dispatch()
+        let {data } = response;
+        if(data.d){
+          dispatch({type: SET_ERRORS, payload: data.d})
+        } else {
+          dispatch({type: SET_ERRORS, payload: data})
+        }
+        // dispatch(fetchError(message.text));
       });
-  };
+};
+
+export const loginUser = (user, history) => dispatch => {
+  dispatch({type: CLEAR_ERRORS})
+  return axios
+      .post(`${BUBU_API_URL}/auth/signin`, user)
+      .then(({data}) => {
+
+        let { token } = data;
+          dispatch({type: UPDATE_AUTH_USER, payload: data })
+          localStorage.setItem('idToken', token);
+          
+          dispatch(getUserData(history));
+          // history.push('/')
+          // window.location.href = '/home'
+      })
+      .catch(({response}) => {
+        // dispatch()
+        console.log(response)
+        let data = response ? response.data : null;
+        if(data && data.d){
+          dispatch({type: SET_ERRORS, payload: data.d})
+        } else {
+          dispatch({type: SET_ERRORS, payload: data})
+        }
+      });
 };
 
 
-export const getUserData = () => { 
-  return (dispatch) => {
-    dispatch({type: SET_LOADING}) 
 
-  axios.get(`${commonData.apiUrl}/auth`, { headers: authHeader() }).then(
-    (res) => {
-      let { email, id, roles, name, address, dpUrl, business, contacts } = res.data;
-      localStorage.setItem('user', JSON.stringify({email, id, roles, name, address, dpUrl, contacts}));
-      dispatch({type: SET_DASHBOARD_DATA, payload: { business }})
-      dispatch(setAuthUser(res.data))
-      dispatch(fetchSuccess());
-      dispatch({type: STOP_LOADING}) 
+export const getUserData = (history) => (dispatch) => {
+  return axios.get(`${BUBU_API_URL}/auth`, { headers: authHeader() }).then(
+    ({data}) => {
+          let {  user } = data;
+        dispatch({type: UPDATE_AUTH_USER, payload: user})
+        dispatch({type: SET_AUTHENTICATED})
+
+    },
+    (err) => {
+     let data = err && err.response ? err.response.data : {};
+      
+      let { text, type } = data;
+      if(text && type === 'error'){
+        dispatch(logout())
+      }
+    }
+  );
+}
+
+
+
+export const verifyOTP = (otp) => (dispatch) => {
+  return axios.get(`${BUBU_API_URL}/auth/otp/${otp}`, { headers: authHeader() }).then(
+    ({data}) => {
+      console.log(data)
     },
     (err) => {
       console.log(err.response)
-      dispatch(fetchError('Something went wrong!'));
-      dispatch(logout())
-      dispatch({type: STOP_LOADING}) 
-
     }
   );
-};
 }
 
-export const getStoreData = () => { 
-  return (dispatch) => {
-  axios.get(`${commonData.apiUrl}/store`,)
-  .then(
-    (res) => {
-      let { email, id, name, address, phone, title } = res.data;
-      localStorage.setItem('store', JSON.stringify({email, id, name, phone, address, title}));
 
-      dispatch(setAuthStore(res.data))
-      dispatch(fetchSuccess());
-    },
-    (err) => {
-      console.log(err.response)
-      dispatch(fetchError('Something went wrong!'));
-      dispatch(logout())
-    }
-  );
-};
-}
-
-export const logout = () => {
+export const logout = (history) => {
   return (dispatch) => {
-  axios.get(`${commonData.apiUrl}/auth/logout`)
-  .then(() => {
     localStorage.removeItem('idToken');
     localStorage.removeItem('user');
     dispatch({
       type: CLEAR_USER
     });
-    window.location.href = "/";
+  axios.get(`${BUBU_API_URL}/auth/logout`)
+  .then(({data}) => {
+    console.log(data)
   })
-  .catch(() => {
-    localStorage.removeItem('idToken');
-    localStorage.removeItem('user');
-    dispatch({
-      type: CLEAR_USER
-    });
-    window.location.href = "/";
+  .catch((err) => {
+    console.log(err)
   });
   }
 };

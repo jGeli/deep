@@ -1,25 +1,45 @@
+import { useState, useEffect } from "react";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import { mockTransactions } from "../../data/mockData";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import EmailIcon from "@mui/icons-material/Email";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
-import LineChart from "../../components/LineChart";
-import GeographyChart from "../../components/GeographyChart";
-import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
-import ProgressCircle from "../../components/ProgressCircle";
-import QrCode from '../../components/QrCode';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
-
+import moment from 'moment';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
+import { useDispatch, useSelector } from "react-redux";
+import { sortByDate } from "../../utils/helpers";
+import { getAllRecords } from "../../redux/actions/Data";
 
 const Dashboard = () => {
+  const dispatch = useDispatch()
+  let { members } = useSelector(({dataReducer}) => dataReducer);
+  const [listData, setListData] = useState([]);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+
+const handleSort = () => {
+  let newMembers =  members;
+  // newMembers.sort((a, b) => a.createdAt - b.createdAt)
+  console.log(newMembers)
+  // setListData(newMembers)
+}
+
+
+const handleGetRecords = () => {
+  dispatch(getAllRecords())
+}
+
+
+useEffect(() => {
+  handleGetRecords()
+}, [])
+
+
+useEffect(() => {
+  handleSort();
+}, [members])
+
 
   return (
     <Box m="20px">
@@ -178,34 +198,33 @@ const Dashboard = () => {
               Recent Transactions
             </Typography>
           </Box>
-          {mockTransactions.map((transaction, i) => (
+          {members.map((transaction, i) => (
             <Box
               key={`${transaction.txId}-${i}`}
               display="flex"
-              justifyContent="space-between"
+              justifyContent="center"
               alignItems="center"
               borderBottom={`4px solid ${colors.primary[500]}`}
               p="15px"
             >
-              <Box>
-                <Typography
-                  color={colors.greenAccent[500]}
-                  variant="h5"
-                  fontWeight="600"
-                >
-                  {transaction.txId}
-                </Typography>
+              <Box flexGrow={1}>
                 <Typography color={colors.grey[100]}>
-                  {transaction.user}
+                  {transaction.firstName} {transaction.lastName}
                 </Typography>
               </Box>
-              <Box color={colors.grey[100]}>{transaction.date}</Box>
+              <Box color={colors.grey[100]}></Box>
               <Box
-                backgroundColor={colors.greenAccent[500]}
-                p="5px 10px"
-                borderRadius="4px"
+                // backgroundColor={colors.greenAccent[500]}
+                // p="5px 10px"
+                // borderRadius="4px"
+                color={colors.grey[100]}
+                display="flex"
+                flexDirection="column"
+                alignItems="flex-end"
+                justifyContent="center"
               >
-                ${transaction.cost}
+                 <strong>₱{transaction.membershipFee}</strong>
+                 <em>{moment(transaction.createdAt).format('L')}</em>
               </Box>
             </Box>
           ))}

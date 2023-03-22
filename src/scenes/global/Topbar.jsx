@@ -1,29 +1,26 @@
 import { Box, IconButton, useTheme } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ColorModeContext, tokens } from "../../theme";
-import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_FLUSH } from "../../redux/actions/types";
-import NotificationsIcon from '@mui/icons-material/Notifications';
-
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { OPEN_MEMBERFORM } from "../../redux/actions/types";
 
 const Topbar = ({setIsCollapsed}) => {
   const theme = useTheme();
-  const { isFlush } = useSelector(({dataReducer}) => dataReducer);
+  const { memberForm } = useSelector(({uiReducer}) => uiReducer);
   const dispatch = useDispatch()
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
   let {pathname} = useLocation();
     
       
+      useEffect(() => {
+          localStorage.setItem("theme", theme.palette.mode)
+      }, [theme.palette.mode])
 
     
     console.log(pathname)
@@ -55,18 +52,22 @@ const Topbar = ({setIsCollapsed}) => {
               </Box>
 
       {/* ICONS */}
-      <Box display="flex">
+      <Box display="flex" >
+      
+      <IconButton onClick={() => dispatch({type: OPEN_MEMBERFORM})}>
+          <PersonAddIcon />
+        </IconButton>
        <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (
             <DarkModeOutlinedIcon />
           ) : (
-            <LightModeOutlinedIcon />
+            <LightModeOutlinedIcon  />
           )}
         </IconButton>
          
-        <IconButton>
+        {/* <IconButton>
           <NotificationsIcon />
-        </IconButton>
+        </IconButton> */}
         {/* <IconButton>
           <SettingsOutlinedIcon />
         </IconButton> */}

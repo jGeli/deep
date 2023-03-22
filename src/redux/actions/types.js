@@ -4,6 +4,7 @@
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const SET_USER = 'SET_USER';
+export const SET_AUTHENTICATED = 'SET_AUTHENTICATED';
 
 
 //DATA
@@ -50,7 +51,12 @@ export const SET_NOTIF_COUNT = 'SET_NOTIF_COUNT';
 export const SET_OPTIONS = 'SET_OPTIONS';
 export const CLEAR_OPTIONS = 'CLEAR_OPTIONS';
 export const SET_EXPENSE_DIALOG = 'SET_EXPENSE_DIALOG';
+export const OPEN_MEMBERFORM = 'OPEN_MEMBERFORM';
+export const CLOSE_MEMBERFORM = 'CLOSE_MEMBERFORM';
 
+export const SET_FILTER = 'SET_FILTER';
+export const SET_ACTIVE_NODE = 'SET_ACTIVE_NODE';
+export const RESIZE = 'RESIZE';
 
 
 // STORE
@@ -65,6 +71,11 @@ export const SET_INIT_OBJ = 'SET_INIT_OBJ';
 export const CLEAR_DATA = 'CLEAR_DATA';
 export const SET_SELECTED_USER = 'SET_SELECTED_USER';
 export const SET_USER_DETAILS = 'SET_USER_DETAILS';
+export const SET_MEMBERS = 'SET_MEMBERS';
+export const CLEAR_MEMBERS = 'CLEAR_MEMBERS';
+export const SET_MEMBER = 'SET_MEMBER';
+export const CLEAR_MEMBER = 'CLEAR_MEMBER';
+export const SET_USERS = 'SET_USERS';
 
 //LABELS
 

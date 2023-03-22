@@ -15,10 +15,7 @@ export default function FormDialog({open, setOpen}) {
     
     
     
-    
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+
 
   const handleClose = () => {
     setOpen(false);
@@ -27,9 +24,6 @@ export default function FormDialog({open, setOpen}) {
 
   return (
     <div>
-      <Button variant="outlined" color="secondary" onClick={handleClickOpen}>
-        Add Record
-      </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogContent>
         <FormContent handleClose={handleClose} />

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
@@ -14,61 +14,82 @@ import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
-import Calendar from "./scenes/calendar/calendar";
-import QrScanner from './scenes/qrScanner';
-import LoanManager from './scenes/loan';
-import { getAllStudents } from "./redux/actions/Data";
-import { useDispatch } from "react-redux";
+import { getAllRecords } from "./redux/actions/Data";
+import { useDispatch, useSelector } from "react-redux";
+import DefaultLayout from './scenes/global/DefaultLayout'
+import LoginPage from './scenes/Auth/LoginPage'
+import Snackbar from './components/Snackbar';
+import { getUserData } from "./redux/actions/Auth";
+import FormDialog from "./components/FormDialog";
+import { CLOSE_MEMBERFORM } from "./redux/actions/types";
+
+const token = localStorage.idToken;
 
 
+const ProtectedRoute = ({ isAuthUser, children }) => {
+  if (!token && !isAuthUser) {
+  console.log('Not Login')
+    return <Navigate to="/signin" replace />;
+  }
+
+  return children;
+};
 
 
+const PublicRoute = ({ isAuthUser, children }) => {
+
+  if (isAuthUser) {
+  console.log('Not Login')
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
 
 function App() {
   const dispatch = useDispatch();
+  const { isAuthUser } = useSelector(({auth}) => auth);
+  const { memberForm } = useSelector(({uiReducer}) => uiReducer);
   const [theme, colorMode] = useMode();
-  const [isSidebar, setIsSidebar] = useState(true);
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [selected, setSelected] = useState("Dashboard");
+  const colorModes = useContext(ColorModeContext);
 
-  const handleGetStudents = () => {
-    dispatch(getAllStudents())
+  const handleForm = (e) => {
+      console.log(e)
+      dispatch({type: CLOSE_MEMBERFORM})
   }
-  
-  
-  useEffect(() => {
-    handleGetStudents()
-  }, [])
 
+
+  useEffect(() => {
+  if(token){
+    dispatch(getUserData())
+  }
+  colorModes.toggleColorMode();
+  
+  
+  }, [])
+  
+ 
 
   return (
   
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <div className="app">
-          <Sidebar isSidebar={isSidebar} isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} selected={selected} setSelected={setSelected} />
-          <main className="content">
-            <Topbar setIsSidebar={setIsSidebar} setIsCollapsed={() => setIsCollapsed(!isCollapsed)}  />
-            <div onClick={() => setIsCollapsed(true)}>
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<Team />} />
-              <Route path="/contacts" element={<Contacts />} />
-              <Route path="/loan-manager" element={<LoanManager />} />
-              <Route path="/qr-scanner" element={<QrScanner />} />
-              <Route path="/invoices" element={<Invoices />} />
-              <Route path="/form" element={<Form />} />
-              <Route path="/bar" element={<Bar />} />
-              <Route path="/pie" element={<Pie />} />
-              <Route path="/line" element={<Line />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/geography" element={<Geography />} />
-            </Routes>
-            </div>
-          </main>
-        </div>
+          <Snackbar/>
+          <FormDialog open={memberForm} setOpen={handleForm} />
+          <header id="header" style={{display: 'flex', paddingRight: '20px', paddingLeft: '20px'}}>
+
+               <Routes>
+               {/* <Route path="*" element={<ProtectedRoute isAuthUser={isAuthUser}>
+                    <DefaultLayout/>              
+                </ProtectedRoute>}  /> */}
+              <Route path="*" element={<ProtectedRoute isAuthUser={isAuthUser}>
+                    <DefaultLayout/>              
+                </ProtectedRoute>}  />
+              <Route path="/signin" element={<PublicRoute isAuthUser={isAuthUser}>
+                    <LoginPage/>              
+                </PublicRoute>} />
+             </Routes>
+             </header>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

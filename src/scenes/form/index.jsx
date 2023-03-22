@@ -1,39 +1,53 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, MenuItem, TextField } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_STUDENT } from "../../redux/actions/types";
+import { SET_MEMBER, SET_STUDENT } from "../../redux/actions/types";
 import { createRecord } from "../../redux/actions/Data";
 import { useState } from "react";
+import { MembershipFee } from "../../utils/helpers";
+
+import Autocomplete from '../../components/Autocomplete';
 
 const Form = ({handleClose}) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const { student } = useSelector(({dataReducer}) => dataReducer)
+  const { member } = useSelector(({dataReducer}) => dataReducer)
   const [errors, setErrors] = useState({
   })
   const dispatch = useDispatch()
 
   
   const handleChange = prop => e => {
-    dispatch({type: SET_STUDENT, payload: {...student, [prop]: e.target.value}})
+    dispatch({type: SET_MEMBER, payload: {...member, [prop]: e.target.value}})
   };
+  
+  const handleSelect = e => {
+  console.log(e)
+    dispatch({type: SET_MEMBER, payload: {...member, birthDate: e.target.value}})
+  };
+  
+ 
     
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(student.phone.length < 12) return setErrors({phone: "Please enter in this format +639xx"})
+    if(member.contact.length < 12) return setErrors({contact: "Please enter in this format +639xx"})
     
     
-    dispatch(createRecord(student))
+    dispatch(createRecord(member))
     .then(() => {
       handleClose()
     })
-    console.log(student)
+    console.log(member)
   }
-
+  
+  
+  
+  
+  console.log(member)
 
   return (
     <Box m="20px">
-      <Header title="CREATE RECORD" subtitle="Create a New Student Profile" />
+      <Header title="NEW RECORD" subtitle="Create a New Member Profile" />
 
         <form onSubmit={handleSubmit}>
             <Box
@@ -51,7 +65,7 @@ const Form = ({handleClose}) => {
                 label="First Name"
                 // onBlur={handleBlur}
                 onChange={handleChange('firstName')}
-                value={student.firstName}
+                value={member.firstName}
                 name="firstName"
                 // error={!!touched.firstName && !!errors.firstName}
                 // helperText={touched.firstName && errors.firstName}
@@ -64,11 +78,24 @@ const Form = ({handleClose}) => {
                 label="Last Name"
                 // onBlur={handleBlur}
                 onChange={handleChange('lastName')}
-                value={student.lastName}
+                value={member.lastName}
                 name="lastName"
                 // error={!!touched.lastName && !!errors.lastName}
                 // helperText={touched.lastName && errors.lastName}
                 sx={{ gridColumn: "span 2" }}
+              />
+                 <TextField
+                fullWidth
+                variant="filled"
+                type="text"
+                label="Home Address"
+                // onBlur={handleBlur}
+                onChange={handleChange('address')}
+                value={member.address}
+                name="address"
+                // error={!!touched.lastName && !!errors.lastName}
+                // helperText={touched.lastName && errors.lastName}
+                sx={{ gridColumn: "span 4" }}
               />
               <TextField
                 fullWidth
@@ -77,7 +104,7 @@ const Form = ({handleClose}) => {
                 label="Email"
                 // onBlur={handleBlur}
                 onChange={handleChange('email')}
-                value={student.email}
+                value={member.email}
                 name="email"
                 // error={!!touched.email && !!errors.email}
                 // helperText={touched.email && errors.email}
@@ -89,21 +116,52 @@ const Form = ({handleClose}) => {
                 type="text"
                 label="Contact Number"
                 // onBlur={handleBlur}
-                onChange={handleChange('phone')}
-                value={student.phone}
-                name="phone"
-                error={errors.phone && errors.phone}
-                helperText={errors.phone ? errors.phone : "Ex: 639774461641"}
+                onChange={handleChange('contact')}
+                value={member.contact}
+                name="contact"
+                error={errors.contact && errors.contact}
+                helperText={errors.contact ? errors.contact : "Ex: 639774461641"}
+                sx={{ gridColumn: "span 4" }}
+              />
+                <TextField
+                fullWidth
+                variant="filled"
+                type="date"
+                // onBlur={handleBlur}
+                onChange={(e) => handleSelect(e)}
+                value={member.birthDate}
+                name="birthDate"
+                error={errors.birthDate && errors.birthDate}
+                helperText={errors.birthDate ? errors.birthDate : "Enter Birth Date"}
                 sx={{ gridColumn: "span 4" }}
               />
              
+             <TextField
+               fullWidth
+               variant="filled"
+               type="text"
+          select
+          label="Membership Fee"
+          onChange={handleChange('membershipFee')}
+          value={member.membershipFee}
+          error={errors.membershipFee && errors.membershipFee}
+          helperText={errors.membershipFee && errors.membershipFee }
+          sx={{ gridColumn: "span 4" }}
+          >
+          {MembershipFee.map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+             <Autocomplete />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
             <Button color="secondary" variant="contained" onClick={() => handleClose()}>
                Close
               </Button>&nbsp;&nbsp;
               <Button type="submit" color="secondary" variant="contained">
-                Create New User
+                Save
               </Button>
             </Box>
           </form>
