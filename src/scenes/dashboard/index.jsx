@@ -27,12 +27,6 @@ const handleSort = () => {
 
 
 
-
-useEffect(() => {
-  handleGetRecords()
-}, [])
-
-
 useEffect(() => {
   handleSort();
 }, [members])
