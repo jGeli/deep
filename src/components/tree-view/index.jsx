@@ -37,10 +37,10 @@ const TreeView = () => {
       setFlatArray({})
     }
       
-    if(!activeNode){
-      let node = members.find(a => !a.parent); 
+    if(!activeNode ){
+      let node = newMembers[0]; 
       if(node){
-    dispatch({type: SET_ACTIVE_NODE, payload: node.name})    
+          dispatch({type: SET_ACTIVE_NODE, payload: node.name})    
       }
     }
       
