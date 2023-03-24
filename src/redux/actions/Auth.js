@@ -70,7 +70,6 @@ export const loginUser = (user, history) => dispatch => {
       })
       .catch(({response}) => {
         // dispatch()
-        console.log(response)
         let data = response ? response.data : null;
         if(data && data.d){
           dispatch({type: SET_ERRORS, payload: data.d})

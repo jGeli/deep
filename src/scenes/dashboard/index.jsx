@@ -7,8 +7,6 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import moment from 'moment';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import { useDispatch, useSelector } from "react-redux";
-import { sortByDate } from "../../utils/helpers";
-import { getAllRecords } from "../../redux/actions/Data";
 
 const Dashboard = () => {
   const dispatch = useDispatch()

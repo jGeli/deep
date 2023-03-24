@@ -9,7 +9,6 @@ export const getAllRecords = () => async dispatch => {
   return await axios
   .get(BUBU_API_URL + "/members/getAll")
   .then((response) => {
-    console.log(response)
     dispatch({type: SET_MEMBERS, payload: response.data})
     return response.data;
   });
@@ -24,6 +23,17 @@ export const createRecord = (data) => async dispatch => {
     return response.data;
   });
 };
+
+
+export const updateRecord = (data) => async dispatch => {
+  return await axios
+  .put(BUBU_API_URL + `/members/updateById/${data._id}`, data)
+  .then((response) => {
+    dispatch(getAllRecords());
+    return response.data;
+  });
+};
+
 
 
 
@@ -42,7 +52,6 @@ export const getAllUsers = () => async dispatch => {
   return await axios
   .get(BUBU_API_URL + "/users/getAll")
   .then((response) => {
-    console.log(response)
     dispatch({type: SET_USERS, payload: response.data})
     return response.data;
   });

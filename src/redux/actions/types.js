@@ -57,6 +57,7 @@ export const CLOSE_MEMBERFORM = 'CLOSE_MEMBERFORM';
 export const SET_FILTER = 'SET_FILTER';
 export const SET_ACTIVE_NODE = 'SET_ACTIVE_NODE';
 export const RESIZE = 'RESIZE';
+export const SET_TREE_VIEW = 'SET_TREE_VIEW';
 
 
 // STORE

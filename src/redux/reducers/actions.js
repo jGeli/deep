@@ -12,7 +12,6 @@ export function resize() {
 }
 
 export function setActiveNode(node) {
-console.log(node)
 	Store.dispatch({
 		type: SET_ACTIVE_NODE,
 		node: node

@@ -3,23 +3,32 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { AnimatedTree } from 'react-tree-graph';
 import { setActiveNode } from '../../redux/reducers/actions';
-import { useDispatch } from 'react-redux';
-import { SET_ACTIVE_NODE } from '../../redux/actions/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { OPEN_MEMBERFORM, SET_ACTIVE_NODE, SET_MEMBER } from '../../redux/actions/types';
 
 
 
 export default function TreeContainer(props) {
 	const dispatch = useDispatch();
-	
+	const { members } = useSelector(({dataReducer}) => dataReducer);
+
 	
 	function handleClick(event, node) {
-		console.log(node)
-			dispatch({type: SET_ACTIVE_NODE, payload: node})
+	console.log(node)
+			dispatch({type: SET_ACTIVE_NODE, payload: node});
+			
+			
+			let member = members.find((a) => String(a.name).trim().toLowerCase() === String(node).trim().toLowerCase())
+			dispatch({type: SET_MEMBER, payload: member})
+				console.log(member)
+			dispatch({type: OPEN_MEMBERFORM})
+
 			// setActiveNode(node);
 	}
 
 
 	function getRoot(json) {
+	console.log(json.name === props.activeNode)
 		if (json.name === props.activeNode) {
 			return json;
 		}
@@ -66,7 +75,7 @@ export default function TreeContainer(props) {
 			? 'node searchExcluded'
 			: 'node searchIncluded';
 	}
-
+	
 	let root = props.activeNode ? getRoot(props.data) : props.data;
 
 	root = clone(root);
@@ -76,13 +85,13 @@ export default function TreeContainer(props) {
 	}
 
 	setClassName(root);
-
 	return (
 		<main>
 			<AnimatedTree
 				data={root}
 				height={props.height}
 				width={props.width}
+				key="_id"
 				gProps={{
 					className: 'node',
 					onClick: handleClick

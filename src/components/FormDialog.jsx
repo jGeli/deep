@@ -8,10 +8,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormContent from '../scenes/form';
 import { useDispatch, useSelector } from 'react-redux';
+import { SET_MEMBER } from '../redux/actions/types';
 
 
 export default function FormDialog({open, setOpen}) {
-    
+    const dispatch = useDispatch()
     
     
     
@@ -19,6 +20,7 @@ export default function FormDialog({open, setOpen}) {
 
   const handleClose = () => {
     setOpen(false);
+    dispatch({type: SET_MEMBER, payload: {}})
   };
  
 
@@ -28,9 +30,6 @@ export default function FormDialog({open, setOpen}) {
         <DialogContent>
         <FormContent handleClose={handleClose} />
         </DialogContent>
-        <DialogActions>
-      
-        </DialogActions>
       </Dialog>
     </div>
   );

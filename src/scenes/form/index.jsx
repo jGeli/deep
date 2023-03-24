@@ -3,7 +3,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_MEMBER, SET_STUDENT } from "../../redux/actions/types";
-import { createRecord } from "../../redux/actions/Data";
+import { createRecord, updateRecord } from "../../redux/actions/Data";
 import { useState } from "react";
 import { MembershipFee } from "../../utils/helpers";
 
@@ -22,7 +22,6 @@ const Form = ({handleClose}) => {
   };
   
   const handleSelect = e => {
-  console.log(e)
     dispatch({type: SET_MEMBER, payload: {...member, birthDate: e.target.value}})
   };
   
@@ -30,20 +29,28 @@ const Form = ({handleClose}) => {
     
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    
+    
     if(member.contact.length < 12) return setErrors({contact: "Please enter in this format +639xx"})
     
+    if(member._id){
+      dispatch(updateRecord(member))
+      .then(() => {
+        handleClose()
+      })
+    } else {
+      dispatch(createRecord(member))
+      .then(() => {
+        handleClose()
+      })
+    }
     
-    dispatch(createRecord(member))
-    .then(() => {
-      handleClose()
-    })
-    console.log(member)
+    
+   
   }
   
   
-  
-  
-  console.log(member)
 
   return (
     <Box m="20px">
@@ -161,7 +168,7 @@ const Form = ({handleClose}) => {
                Close
               </Button>&nbsp;&nbsp;
               <Button type="submit" color="secondary" variant="contained">
-                Save
+              {member._id ? "Update" : "Save"}
               </Button>
             </Box>
           </form>

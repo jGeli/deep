@@ -12,9 +12,6 @@ export default function ComboBox() {
         dispatch({type: SET_MEMBER, payload: {...member, parent: val}})
     }
     
-    
-        console.log(members)
-    
   return (
     <Autocomplete
       id="combo-box-demo"

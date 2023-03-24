@@ -12,7 +12,6 @@ export default function Filter() {
 		
 		
 	function handleChange(e) {
-	console.log(e)
 	dispatch({type: SET_FILTER, payload: e.target.value})
 	}
 

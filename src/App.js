@@ -28,7 +28,6 @@ const token = localStorage.idToken;
 
 const ProtectedRoute = ({ isAuthUser, children }) => {
   if (!token && !isAuthUser) {
-  console.log('Not Login')
     return <Navigate to="/signin" replace />;
   }
 
@@ -39,7 +38,6 @@ const ProtectedRoute = ({ isAuthUser, children }) => {
 const PublicRoute = ({ isAuthUser, children }) => {
 
   if (isAuthUser) {
-  console.log('Not Login')
     return <Navigate to="/" replace />;
   }
 
@@ -54,7 +52,6 @@ function App() {
   const colorModes = useContext(ColorModeContext);
 
   const handleForm = (e) => {
-      console.log(e)
       dispatch({type: CLOSE_MEMBERFORM})
   }
 

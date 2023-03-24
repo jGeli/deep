@@ -19,8 +19,6 @@ const dispatch = useDispatch();
     dispatch({type: CLEAR_MESSAGE})
   };
   
-  console.log(snackbar)
-  console.log(errors)
 
   return (
     <div>

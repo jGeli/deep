@@ -16,14 +16,17 @@ const Topbar = ({setIsCollapsed}) => {
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
   let {pathname} = useLocation();
-    
+      
+      const handleForm = () => {
+        dispatch({type: OPEN_MEMBERFORM})
+      }
+      
+      
       
       useEffect(() => {
           localStorage.setItem("theme", theme.palette.mode)
       }, [theme.palette.mode])
 
-    
-    console.log(pathname)
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
       {/* SEARCH BAR */}
@@ -54,7 +57,7 @@ const Topbar = ({setIsCollapsed}) => {
       {/* ICONS */}
       <Box display="flex" >
       
-      <IconButton onClick={() => dispatch({type: OPEN_MEMBERFORM})}>
+      <IconButton onClick={() => handleForm()}>
           <PersonAddIcon />
         </IconButton>
        <IconButton onClick={colorMode.toggleColorMode}>

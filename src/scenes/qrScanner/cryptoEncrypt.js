@@ -9,7 +9,6 @@ export const encryptData = (message) => {
 
     const hashDigest = sha256(message);
     const hmacDigest = Base64.stringify(hmacSHA512(hashDigest, "bugtech"));
-        console.log(hmacDigest)
     return hmacDigest;
     
 }

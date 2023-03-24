@@ -17,10 +17,11 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import { ExitToApp } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/actions/Auth";
+import ForkRightIcon from '@mui/icons-material/ForkRight';
+
 
 const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   const theme = useTheme();
@@ -53,14 +54,12 @@ const Sidebar = ({isCollapsed, setIsCollapsed, setSelected, selected}) => {
   
   
   const handleLogout = () => {
-  console.log('LOGOUT')
      dispatch(logout())
   }
   
   
   useEffect(() => {
       let loc = params['*'];
-  console.log(loc)
     setSelected(loc ? String(loc).toUpperCase() : "DASHBOARD")
     
     
@@ -171,7 +170,7 @@ const Sidebar = ({isCollapsed, setIsCollapsed, setSelected, selected}) => {
               <Item
               title="GENEALOGY"
               to="/genealogy"
-              icon={<AccountTreeIcon />}
+              icon={<ForkRightIcon />}
               selected={selected}
               setSelected={handleSelect}
             />

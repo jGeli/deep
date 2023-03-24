@@ -7,9 +7,11 @@ import { useTheme } from "@mui/material";
 import QrCode from "../../components/QrCode";
 import FormDialog from '../../components/FormDialog';
 //Redux
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { OPEN_MEMBERFORM, SET_MEMBER } from "../../redux/actions/types";
 
 const Contacts = () => {
+  const dispatch = useDispatch()
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const {members} = useSelector(({dataReducer}) => dataReducer)
@@ -44,10 +46,11 @@ const Contacts = () => {
 
   const handleClick = (e) => {
     setSelected(e.row)
+    console.log(e)
+    dispatch({type: SET_MEMBER, payload: e.row})
+    dispatch({type: OPEN_MEMBERFORM})
   }
   
-
-  console.log(selected)
 
   
   return (
