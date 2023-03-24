@@ -5,30 +5,28 @@ import { AnimatedTree } from 'react-tree-graph';
 import { setActiveNode } from '../../redux/reducers/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { OPEN_MEMBERFORM, SET_ACTIVE_NODE, SET_MEMBER } from '../../redux/actions/types';
+import { Box } from '@mui/material';
 
 
 
 export default function TreeContainer(props) {
 	const dispatch = useDispatch();
-	const { members } = useSelector(({dataReducer}) => dataReducer);
 
 	
 	function handleClick(event, node) {
-	console.log(node)
 			dispatch({type: SET_ACTIVE_NODE, payload: node});
 			
 			
-			let member = members.find((a) => String(a.name).trim().toLowerCase() === String(node).trim().toLowerCase())
-			dispatch({type: SET_MEMBER, payload: member})
-				console.log(member)
-			dispatch({type: OPEN_MEMBERFORM})
+			// let member = members.find((a) => String(a.name).trim().toLowerCase() === String(node).trim().toLowerCase())
+			// dispatch({type: SET_MEMBER, payload: member})
+				// console.log(member)
+			// dispatch({type: OPEN_MEMBERFORM})
 
 			// setActiveNode(node);
 	}
 
 
 	function getRoot(json) {
-	console.log(json.name === props.activeNode)
 		if (json.name === props.activeNode) {
 			return json;
 		}
@@ -87,6 +85,7 @@ export default function TreeContainer(props) {
 	setClassName(root);
 	return (
 		<main>
+		<Box className='tree-container'>
 			<AnimatedTree
 				data={root}
 				height={props.height}
@@ -100,6 +99,7 @@ export default function TreeContainer(props) {
 					dy: 3.5
 				}}
 				steps={30}/>
+				</Box>
 		</main>
 	);
 }

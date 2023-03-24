@@ -22,12 +22,14 @@ const TreeView = () => {
   
   useEffect(() => {
     let newMembers = [];
-    
-      members.forEach(member => {
-          newMembers.push({...member, parentId: member.parent ? member.parent : null})
+    let sortArray = [...members];
+    sortArray.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      .forEach((member, index) => {
+          newMembers.push({...member, id: index + 1})
       })
-    
-    
+      console.log(sortArray)
+      console.log(newMembers)
+
     if(newMembers.length > 0) {
       let flat = flatToTreeView(newMembers);
       setFlatArray(flat[0])
@@ -46,11 +48,10 @@ const TreeView = () => {
   }, [members])
   
 
-console.log(treeView)
   
 	return (
-		<div id="container">
-			<Header   filter={filter} timestamp={json.timestamp}/>
+		<div >
+			<Header filter={filter} timestamp={json.timestamp}/>
       <TreeContainer
 				activeNode={activeNode}
 				data={flatArray}

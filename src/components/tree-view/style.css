@@ -1,4 +1,9 @@
-
+.tree-container {
+	width: 100vw;
+	height: 90vh;
+	overflow: scroll;
+	margin: 20px;
+}
 .node circle {
 	fill: #F3F3FF;
 	stroke: #2593B8;
@@ -34,7 +39,7 @@ path.link {
 
 body {
 	background-color: #242424;
-	overflow-x: hidden;
+	overflow: hidden;
 }
 
 /* span {
