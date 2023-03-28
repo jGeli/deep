@@ -7,16 +7,21 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { OPEN_MEMBERFORM } from "../../redux/actions/types";
+import { OPEN_MEMBERFORM, SET_FILTER } from "../../redux/actions/types";
+import SearchIcon from "@mui/icons-material/Search";
+import InputBase from "@mui/material/InputBase";
 
 const Topbar = ({setIsCollapsed}) => {
   const theme = useTheme();
-  const { memberForm } = useSelector(({uiReducer}) => uiReducer);
+  const { memberForm, filter } = useSelector(({uiReducer}) => uiReducer);
   const dispatch = useDispatch()
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
-  let {pathname} = useLocation();
-      
+		
+	function handleChange(e) {
+	console.log(e)
+	dispatch({type: SET_FILTER, payload: e.target.value})
+	}
       const handleForm = () => {
         dispatch({type: OPEN_MEMBERFORM})
       }
@@ -29,30 +34,30 @@ const Topbar = ({setIsCollapsed}) => {
 
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
-      {/* SEARCH BAR */}
-   
-        {/* <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
-        <IconButton type="button" sx={{ p: 1 }}>
-          <SearchIcon />
-        </IconButton> */}
-              <Box
-              display="flex"
+    <Box display="flex" >
+       <Box
               backgroundColor={colors.primary[400]}
               borderRadius="3px"
-                // ml="15px"
+             
               >
-                {/* <Typography variant="h3" color={colors.grey[100]}>
-                  ADMINS
-                </Typography> */}
-                <IconButton onClick={setIsCollapsed}
-            
-                >
-                  <MenuOutlinedIcon />
-                </IconButton>
-                {/* <FormGroup>
-                   <FormControlLabel control={<Switch color="secondary" checked={isFlush} onChange={() => dispatch({type: SET_FLUSH, payload: !isFlush})} />} label="Flash" />
-                </FormGroup> */}
+              <IconButton onClick={setIsCollapsed}
+            >
+              <MenuOutlinedIcon />
+            </IconButton>
               </Box>
+      {/* SEARCH BAR */}
+      <Box
+        display="flex"
+        backgroundColor={colors.primary[400]}
+        borderRadius="3px"
+           ml="15px"
+      >
+        <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" onChange={(e) => handleChange(e)} />
+        <IconButton type="button" sx={{ p: 1 }}>
+          <SearchIcon />
+        </IconButton>
+      </Box>
+      </Box>
 
       {/* ICONS */}
       <Box display="flex" >

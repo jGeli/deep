@@ -13,7 +13,7 @@ const INIT_STATE = {
       type: ''
     },
     memberForm: false,
-    treeView: "route"
+    treeView: "dnd"
 };
 
 export default (state = INIT_STATE, action) => {

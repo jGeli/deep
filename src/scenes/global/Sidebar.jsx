@@ -6,7 +6,6 @@ import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
@@ -16,9 +15,9 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import { ExitToApp } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/actions/Auth";
 import ForkRightIcon from '@mui/icons-material/ForkRight';
 
@@ -44,6 +43,7 @@ const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
 const Sidebar = ({isCollapsed, setIsCollapsed, setSelected, selected}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const {treeView} = useSelector(({uiReducer}) => uiReducer)
   const dispatch = useDispatch();
   let params = useParams();
 
@@ -163,7 +163,7 @@ const Sidebar = ({isCollapsed, setIsCollapsed, setSelected, selected}) => {
               <Item
               title="MEMBERS"
               to="/members"
-              icon={<ContactsOutlinedIcon />}
+              icon={<AccountTreeIcon fontSize='small' color={treeView === 'dnd' ? 'secondary' : ""}/>}
               selected={selected}
               setSelected={handleSelect}
             />

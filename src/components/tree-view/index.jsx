@@ -51,7 +51,7 @@ const TreeView = () => {
   
 	return (
 		<div >
-			<Header filter={filter} timestamp={json.timestamp}/>
+			{/* <Header filter={filter} timestamp={json.timestamp}/> */}
       <TreeContainer
 				activeNode={activeNode}
 				data={flatArray}
