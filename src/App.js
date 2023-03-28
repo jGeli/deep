@@ -68,7 +68,7 @@ function App() {
   
   
   }, [isAuthUser])
-  console.log()
+  console.log(colorMode)
   return (
   
     <ColorModeContext.Provider value={colorMode}>

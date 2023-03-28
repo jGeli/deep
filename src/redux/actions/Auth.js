@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { SEND_FORGET_PASSWORD_EMAIL, UPDATE_AUTH_USER, UPDATE_LOAD_USER, CLEAR_USER,  SET_ERRORS, CLEAR_ERRORS, SET_AUTHENTICATED  } from './types';
 
-import {BUBU_API_URL } from '../../commonData';
+import {API_URL } from '../../commonData';
 import { authHeader } from '../auth-header';
 
 
@@ -35,7 +35,7 @@ export const setForgetPassMailSent = status => {
 export const registerUser = (user, rid) => dispatch => {
   dispatch({type: CLEAR_ERRORS})
   return axios
-      .post(`${BUBU_API_URL}/auth/signup?rid=${rid}`, user)
+      .post(`${API_URL}/auth/signup?rid=${rid}`, user)
       .then(({data}) => {
         // let { token } = data;
           // dispatch({type: UPDATE_AUTH_USER, payload: data })
@@ -57,7 +57,7 @@ export const registerUser = (user, rid) => dispatch => {
 export const loginUser = (user, history) => dispatch => {
   dispatch({type: CLEAR_ERRORS})
   return axios
-      .post(`${BUBU_API_URL}/auth/signin`, user)
+      .post(`${API_URL}/auth/signin`, user)
       .then(({data}) => {
 
         let { token } = data;
@@ -82,20 +82,15 @@ export const loginUser = (user, history) => dispatch => {
 
 
 export const getUserData = (history) => (dispatch) => {
-  return axios.get(`${BUBU_API_URL}/auth`, { headers: authHeader() }).then(
+  return axios.get(`${API_URL}/auth`, { headers: authHeader() }).then(
     ({data}) => {
           let {  user } = data;
         dispatch({type: UPDATE_AUTH_USER, payload: user})
         dispatch({type: SET_AUTHENTICATED})
-
     },
     (err) => {
-     let data = err && err.response ? err.response.data : {};
-      
-      let { text, type } = data;
-      if(text && type === 'error'){
+        console.log(err)
         dispatch(logout())
-      }
     }
   );
 }
@@ -103,7 +98,7 @@ export const getUserData = (history) => (dispatch) => {
 
 
 export const verifyOTP = (otp) => (dispatch) => {
-  return axios.get(`${BUBU_API_URL}/auth/otp/${otp}`, { headers: authHeader() }).then(
+  return axios.get(`${API_URL}/auth/otp/${otp}`, { headers: authHeader() }).then(
     ({data}) => {
       console.log(data)
     },
@@ -121,7 +116,7 @@ export const logout = (history) => {
     dispatch({
       type: CLEAR_USER
     });
-  axios.get(`${BUBU_API_URL}/auth/logout`)
+  axios.get(`${API_URL}/auth/logout`)
   .then(({data}) => {
     console.log(data)
   })

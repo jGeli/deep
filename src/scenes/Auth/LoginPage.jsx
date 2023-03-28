@@ -19,6 +19,7 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/actions/Auth';
+import { useEffect } from 'react';
 
 function Copyright(props) {
   return (
@@ -67,7 +68,9 @@ export default function SignInSide({history}) {
   
   };
   
-  
+  useEffect(() => {
+    localStorage.setItem("theme", theme.palette.mode)
+}, [theme.palette.mode])
       
   console.log(errors)
 
