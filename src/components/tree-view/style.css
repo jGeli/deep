@@ -1,7 +1,7 @@
 .tree-container {
 	width: 100vw;
 	height: 90vh;
-	overflow: scroll;
+	overflow: auto;
 	margin: 20px;
 }
 .node circle {
@@ -37,10 +37,7 @@ path.link {
 	stroke-width: 1.5px;
 }
 
-body {
-	background-color: #242424;
-	overflow: hidden;
-}
+
 
 /* span {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

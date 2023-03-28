@@ -57,7 +57,9 @@ function App() {
 
 
   useEffect(() => {
-  if(token){
+    const idToken = localStorage.idToken;
+
+  if(idToken){
     dispatch(getUserData());
     dispatch(getAllRecords());
 
@@ -65,15 +67,15 @@ function App() {
   colorModes.toggleColorMode();
   
   
-  }, [])
-
+  }, [isAuthUser])
+  console.log()
   return (
   
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
           <Snackbar/>
           <FormDialog open={memberForm} setOpen={handleForm} />
-          <header id="header" style={{display: 'flex', paddingRight: '20px', paddingLeft: '20px'}}>
+          <header id="header" >
 
                <Routes>
                {/* <Route path="*" element={<ProtectedRoute isAuthUser={isAuthUser}>
