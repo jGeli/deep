@@ -7,6 +7,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import moment from 'moment';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import { useDispatch, useSelector } from "react-redux";
+import { insertDecimal } from "../../utils/helpers";
 
 const Dashboard = () => {
   const dispatch = useDispatch()
@@ -53,8 +54,8 @@ useEffect(() => {
           justifyContent="center"
         >
           <StatBox
-            title="12,361"
-            subtitle="Entry Fund"
+            title="$0"
+            subtitle="Membership Fund"
             progress="0.75"
             increase="+14%"
             icon={
@@ -73,8 +74,8 @@ useEffect(() => {
           justifyContent="center"
         >
           <StatBox
-            title="1,325,134"
-            subtitle="Pairing Bonus"
+            title="$0"
+            subtitle="Direct Referral"
             progress="0.80"
             increase="+43%"
             icon={
@@ -118,6 +119,7 @@ useEffect(() => {
                 <Typography color={colors.grey[100]}>
                   {transaction.firstName} {transaction.lastName}
                 </Typography>
+                <strong>{String(transaction.rank).toUpperCase()}</strong> <em>({String(transaction.status).toUpperCase()})</em>
               </Box>
               <Box color={colors.grey[100]}></Box>
               <Box
@@ -130,7 +132,7 @@ useEffect(() => {
                 alignItems="flex-end"
                 justifyContent="center"
               >
-                 <strong>₱{transaction.membershipFee}</strong>
+                 <strong>${insertDecimal(transaction.membershipFee)}</strong>
                  <em>{moment(transaction.createdAt).format('L')}</em>
               </Box>
             </Box>

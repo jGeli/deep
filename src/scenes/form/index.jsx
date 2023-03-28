@@ -1,4 +1,4 @@
-import { Box, Button, MenuItem, TextField } from "@mui/material";
+import { Box, Button, InputAdornment, MenuItem, TextField } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,10 +18,21 @@ const Form = ({handleClose}) => {
 
   
   const handleChange = prop => e => {
+    delete errors[prop]
+  
     dispatch({type: SET_MEMBER, payload: {...member, [prop]: e.target.value}})
   };
   
-  const handleSelect = e => {
+  
+  const handleSelect =  e => {
+    delete errors['membershipFee']
+    console.log(e)
+    let pack = MembershipFee.find(a => a.value === e.target.value)
+    console.log(pack)
+    dispatch({type: SET_MEMBER, payload: {...member, membershipFee: pack.value, rank: pack.rank, status: pack.status }})
+  };
+  
+  const handleDate = e => {
     dispatch({type: SET_MEMBER, payload: {...member, birthDate: e.target.value}})
   };
   
@@ -32,22 +43,13 @@ const Form = ({handleClose}) => {
     
     
     
-    if(member.contact.length < 12) return setErrors({contact: "Please enter in this format +639xx"})
+    if(member.phone.length !== 10) return setErrors({phone: "Invalid format. Ex. 977XXXXXXX"})
     
     if(member._id){
       dispatch(updateRecord(member))
-      .then(() => {
-        handleClose()
-      })
     } else {
       dispatch(createRecord(member))
-      .then(() => {
-        handleClose()
-      })
     }
-    
-    
-   
   }
   
   
@@ -59,7 +61,7 @@ const Form = ({handleClose}) => {
         <form onSubmit={handleSubmit}>
             <Box
               display="grid"
-              gap="30px"
+              gap="15px"
               gridTemplateColumns="repeat(4, minmax(0, 1fr))"
               sx={{
                 "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
@@ -69,6 +71,7 @@ const Form = ({handleClose}) => {
                 fullWidth
                 variant="filled"
                 type="text"
+                size="small"
                 label="First Name"
                 // onBlur={handleBlur}
                 onChange={handleChange('firstName')}
@@ -82,6 +85,7 @@ const Form = ({handleClose}) => {
                 fullWidth
                 variant="filled"
                 type="text"
+                size="small"
                 label="Last Name"
                 // onBlur={handleBlur}
                 onChange={handleChange('lastName')}
@@ -91,11 +95,12 @@ const Form = ({handleClose}) => {
                 // helperText={touched.lastName && errors.lastName}
                 sx={{ gridColumn: "span 2" }}
               />
-                 <TextField
+                     <TextField
                 fullWidth
                 variant="filled"
                 type="text"
                 label="Home Address"
+                size="small"
                 // onBlur={handleBlur}
                 onChange={handleChange('address')}
                 value={member.address}
@@ -104,70 +109,81 @@ const Form = ({handleClose}) => {
                 // helperText={touched.lastName && errors.lastName}
                 sx={{ gridColumn: "span 4" }}
               />
+              
               <TextField
+                fullWidth
+                variant="filled"
+                size="small"
+                type="date"
+                // onBlur={handleBlur}
+                onChange={(e) => handleDate(e)}
+                value={member.birthDate}
+                name="birthDate"
+                error={errors.birthDate && errors.birthDate}
+                helperText={errors.birthDate ? errors.birthDate : "Birth Date"}
+                sx={{ gridColumn: "span 2" }}
+              />
+                <TextField
                 fullWidth
                 variant="filled"
                 type="text"
                 label="Email"
+                size="small"
                 // onBlur={handleBlur}
                 onChange={handleChange('email')}
                 value={member.email}
                 name="email"
                 // error={!!touched.email && !!errors.email}
                 // helperText={touched.email && errors.email}
-                sx={{ gridColumn: "span 4" }}
+                sx={{ gridColumn: "span 2" }}
               />
-              <TextField
+          
+            
+         
+                  <TextField
                 fullWidth
                 variant="filled"
+                size="small"
                 type="text"
                 label="Contact Number"
                 // onBlur={handleBlur}
-                onChange={handleChange('contact')}
-                value={member.contact}
-                name="contact"
-                error={errors.contact && errors.contact}
-                helperText={errors.contact ? errors.contact : "Ex: 639774461641"}
-                sx={{ gridColumn: "span 4" }}
+                onChange={handleChange('phone')}
+                value={member.phone}
+                name="phone"
+                error={errors.phone && errors.phone}
+                helperText={errors.phone ? errors.phone : "Ex: 9774461641"}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">+63</InputAdornment>,
+                }}
+                sx={{ gridColumn: "span 2" }}
               />
-                <TextField
-                fullWidth
-                variant="filled"
-                type="date"
-                // onBlur={handleBlur}
-                onChange={(e) => handleSelect(e)}
-                value={member.birthDate}
-                name="birthDate"
-                error={errors.birthDate && errors.birthDate}
-                helperText={errors.birthDate ? errors.birthDate : "Enter Birth Date"}
-                sx={{ gridColumn: "span 4" }}
-              />
-             
              <TextField
                fullWidth
                variant="filled"
                type="text"
+               size="small"
           select
           label="Membership Fee"
-          onChange={handleChange('membershipFee')}
+          onChange={handleSelect}
           value={member.membershipFee}
           error={errors.membershipFee && errors.membershipFee}
           helperText={errors.membershipFee && errors.membershipFee }
-          sx={{ gridColumn: "span 4" }}
+          sx={{ gridColumn: "span 2" }}
           >
-          {MembershipFee.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
+          {MembershipFee.map((option, index) => (
+            <MenuItem key={index} value={option.value}>
+              {option.name}
             </MenuItem>
           ))}
         </TextField>
-             <Autocomplete />
+             {/* <Autocomplete /> */}
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
-            <Button color="secondary" variant="contained" onClick={() => handleClose()}>
+            <Button size="small"
+            color="secondary" variant="contained" onClick={() => handleClose()}>
                Close
               </Button>&nbsp;&nbsp;
-              <Button type="submit" color="secondary" variant="contained">
+              <Button size="small" type="submit" color="secondary" variant="contained">
               {member._id ? "Update" : "Save"}
               </Button>
             </Box>

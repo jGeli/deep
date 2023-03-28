@@ -1,4 +1,4 @@
-import { SET_LOADING, STOP_LOADING, SET_ERRORS, CLEAR_ERRORS, SET_FILTER, RESIZE, SET_MESSAGE, CLEAR_MESSAGE, SET_ACTIVE_NODE, OPEN_MEMBERFORM, CLOSE_MEMBERFORM, SET_TREE_VIEW} from "../actions/types";
+import { SET_LOADING, STOP_LOADING, SET_ERRORS, CLEAR_ERRORS, SET_FILTER, RESIZE, SET_MESSAGE, CLEAR_MESSAGE, SET_ACTIVE_NODE, OPEN_MEMBERFORM, CLOSE_MEMBERFORM, SET_TREE_VIEW, CLEAR_USER} from "../actions/types";
 
 const INIT_STATE = {
     loading: false,
@@ -20,6 +20,14 @@ export default (state = INIT_STATE, action) => {
   const {type, payload} = action;
 
   switch (type) {
+    case CLEAR_USER: {
+        return {
+          ...INIT_STATE
+        }
+    }
+      
+  
+  
     case SET_TREE_VIEW: {
       let message = null;
       Object.values(payload).forEach(a => {

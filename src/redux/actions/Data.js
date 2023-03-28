@@ -1,9 +1,10 @@
 // import {fetchError, fetchStart, fetchSuccess} from "../actions";
 
-import {RESIZE, SET_ACTIVE_NODE, SET_MEMBERS, SET_MESSAGE, SET_STUDENTS, SET_USERS} from "./types";
+import {CLOSE_MEMBERFORM, RESIZE, SET_ACTIVE_NODE, SET_MEMBER, SET_MEMBERS, SET_MESSAGE, SET_STUDENTS, SET_USERS} from "./types";
 import { API_URL } from "../../commonData";
 import axios from 'axios';
 import { authHeader } from '../auth-header';
+import { checkUnauthorize } from "./Auth";
 
 
 export const getAllRecords = () => async dispatch => {
@@ -18,10 +19,15 @@ export const getAllRecords = () => async dispatch => {
 
 export const createRecord = (data) => async dispatch => {
   return await axios
-  .post(API_URL + "/members/create", data)
+  .post(API_URL + "/members/create", data, { headers: authHeader() })
   .then((response) => {
+    dispatch({type: SET_MEMBER, payload: {}})
+    dispatch({type: CLOSE_MEMBERFORM})
     dispatch(getAllRecords());
     return response.data;
+  })
+  .catch(err => {
+    dispatch(checkUnauthorize(err))
   });
 };
 

@@ -98,6 +98,15 @@ export const sortByDate = (data) => {
  return newArray
 }
 
-export const MembershipFee = [12000, 24000, 48000, 60000]
+
+
+export const insertDecimal = (num) => {
+    return parseFloat(Math.round(num * 100) / 100).toFixed(2);
+}
+
+export const MembershipFee = [
+  {name: '$249 - GOLD(QUEUE)', value: 249, rank: 'gold', status: 'queue'},
+  {name: '$499 - GOLD(ACTIVATED)', value: 499, rank: 'gold', status: 'activated'}
+  ]
 
   

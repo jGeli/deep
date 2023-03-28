@@ -59,7 +59,6 @@ export const loginUser = (user, history) => dispatch => {
   return axios
       .post(`${API_URL}/auth/signin`, user)
       .then(({data}) => {
-
         let { token } = data;
           dispatch({type: UPDATE_AUTH_USER, payload: data })
           localStorage.setItem('idToken', token);
@@ -125,3 +124,11 @@ export const logout = (history) => {
   });
   }
 };
+
+export const checkUnauthorize = ({response}) => dispatch => {
+        console.log(response)
+        let { data, status } = response;
+        if(status === 403 && (data && data.text === "Unauthorized")){
+          dispatch(logout());
+        }
+};  

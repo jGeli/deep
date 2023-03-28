@@ -51,9 +51,6 @@ function App() {
   const [theme, colorMode] = useMode();
   const colorModes = useContext(ColorModeContext);
 
-  const handleForm = (e) => {
-      dispatch({type: CLOSE_MEMBERFORM})
-  }
 
 
   useEffect(() => {
@@ -74,7 +71,7 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
           <Snackbar/>
-          <FormDialog open={memberForm} setOpen={handleForm} />
+          <FormDialog open={memberForm} />
           <header id="header" >
 
                <Routes>
