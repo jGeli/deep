@@ -31,7 +31,7 @@ const Contacts = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "contact",
+      field: "phone",
       headerName: "Phone Number",
       flex: 1,
     },
