@@ -1,6 +1,6 @@
 // import {fetchError, fetchStart, fetchSuccess} from "../actions";
 
-import {CLOSE_MEMBERFORM, RESIZE, SET_ACTIVE_NODE, SET_MEMBER, SET_MEMBERS, SET_MESSAGE, SET_STUDENTS, SET_USERS} from "./types";
+import {CLOSE_MEMBERFORM, RESIZE, SET_ACTIVE_NODE, SET_ERRORS, SET_MEMBER, SET_MEMBERS, SET_MESSAGE, SET_STUDENTS, SET_USERS} from "./types";
 import { API_URL } from "../../commonData";
 import axios from 'axios';
 import { authHeader } from '../auth-header';
@@ -27,6 +27,9 @@ export const createRecord = (data) => async dispatch => {
     return response.data;
   })
   .catch(err => {
+    let { data } = err.response;
+    dispatch({type: SET_ERRORS, payload: data.d})
+  console.log(err)
     dispatch(checkUnauthorize(err))
   });
 };

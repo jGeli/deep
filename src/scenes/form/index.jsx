@@ -2,7 +2,7 @@ import { Box, Button, InputAdornment, MenuItem, TextField } from "@mui/material"
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_MEMBER, SET_STUDENT } from "../../redux/actions/types";
+import { SET_ERRORS, SET_MEMBER, SET_STUDENT } from "../../redux/actions/types";
 import { createRecord, updateRecord } from "../../redux/actions/Data";
 import { useState } from "react";
 import { MembershipFee } from "../../utils/helpers";
@@ -11,24 +11,20 @@ import Autocomplete from '../../components/Autocomplete';
 
 const Form = ({handleClose}) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const { member } = useSelector(({dataReducer}) => dataReducer)
-  const [errors, setErrors] = useState({
-  })
+  const { member } = useSelector(({dataReducer}) => dataReducer);
+  const { errors } = useSelector(({uiReducer}) => uiReducer);
   const dispatch = useDispatch()
 
   
   const handleChange = prop => e => {
-    delete errors[prop]
-  
+    
     dispatch({type: SET_MEMBER, payload: {...member, [prop]: e.target.value}})
+
   };
   
   
   const handleSelect =  e => {
-    delete errors['membershipFee']
-    console.log(e)
     let pack = MembershipFee.find(a => a.value === e.target.value)
-    console.log(pack)
     dispatch({type: SET_MEMBER, payload: {...member, membershipFee: pack.value, rank: pack.rank, status: pack.status }})
   };
   
@@ -43,7 +39,9 @@ const Form = ({handleClose}) => {
     
     
     
-    if(member.phone.length !== 10) return setErrors({phone: "Invalid format. Ex. 977XXXXXXX"})
+    if(member.phone.length !== 10){
+      return dispatch({type: SET_ERRORS, payload: {...errors, phone: "Invalid format. Ex. 977XXXXXXX"}})
+    }
     
     if(member._id){
       dispatch(updateRecord(member))
