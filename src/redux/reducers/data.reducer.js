@@ -1,4 +1,4 @@
-import {CLEAR_MEMBER, CLEAR_MEMBERS, SET_FLUSH, SET_MEMBER, SET_MEMBERS, SET_STUDENT, SET_STUDENTS} from "../actions/types";
+import {CLEAR_MEMBER, CLEAR_MEMBERS, SET_FLUSH, SET_MEMBER, SET_MEMBERS, SET_STUDENT, SET_STUDENTS, SET_TRANSACTIONS} from "../actions/types";
 
 const INIT_STATE = {
     students: [],
@@ -10,6 +10,9 @@ const INIT_STATE = {
       email: "",
       phone: "",
     },
+    transactions: [],
+    totalMembershipFund: 0,
+    totalDirectReferral: 0,
     member: {
       firstName: "",
       lastName: "",
@@ -30,6 +33,13 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
         students: payload
+      };
+    }
+    
+    case SET_TRANSACTIONS: {
+      return {
+        ...state,
+        ...payload
       };
     }
     

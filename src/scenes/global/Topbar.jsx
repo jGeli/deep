@@ -7,10 +7,10 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { OPEN_MEMBERFORM, SET_FILTER } from "../../redux/actions/types";
+import { OPEN_MEMBERFORM, SET_ACTIVE_NODE, SET_FILTER } from "../../redux/actions/types";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
-
+import RestorePageIcon from '@mui/icons-material/RestorePage';
 const Topbar = ({setIsCollapsed}) => {
   const theme = useTheme();
   const { memberForm, filter } = useSelector(({uiReducer}) => uiReducer);
@@ -25,6 +25,14 @@ const Topbar = ({setIsCollapsed}) => {
       const handleForm = () => {
         dispatch({type: OPEN_MEMBERFORM})
       }
+      
+      
+      		
+	function handleClick() {
+		dispatch({type: SET_ACTIVE_NODE, payload: null});
+		dispatch({type: SET_FILTER, payload: ''});
+	}
+	
       
       
       
@@ -57,6 +65,9 @@ const Topbar = ({setIsCollapsed}) => {
           <SearchIcon />
         </IconButton>
       </Box>
+        <IconButton onClick={() => handleClick()} >
+          <RestorePageIcon/>
+        </IconButton>
       </Box>
 
       {/* ICONS */}

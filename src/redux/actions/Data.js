@@ -1,6 +1,6 @@
 // import {fetchError, fetchStart, fetchSuccess} from "../actions";
 
-import {CLOSE_MEMBERFORM, RESIZE, SET_ACTIVE_NODE, SET_ERRORS, SET_MEMBER, SET_MEMBERS, SET_MESSAGE, SET_STUDENTS, SET_USERS} from "./types";
+import {CLOSE_MEMBERFORM, RESIZE, SET_ACTIVE_NODE, SET_ERRORS, SET_MEMBER, SET_MEMBERS, SET_MESSAGE, SET_STUDENTS, SET_TRANSACTIONS, SET_USERS} from "./types";
 import { API_URL } from "../../commonData";
 import axios from 'axios';
 import { authHeader } from '../auth-header';
@@ -15,6 +15,16 @@ export const getAllRecords = () => async dispatch => {
     return response.data;
   });
 };
+
+export const getAllTransactions = () => async dispatch => {
+  return await axios
+  .get(API_URL + "/transactions/getAll", { headers: authHeader() })
+  .then((response) => {
+    dispatch({type: SET_TRANSACTIONS, payload: response.data})
+    return response.data;
+  });
+};
+
 
 
 export const createRecord = (data) => async dispatch => {

@@ -77,6 +77,7 @@ export const CLEAR_MEMBERS = 'CLEAR_MEMBERS';
 export const SET_MEMBER = 'SET_MEMBER';
 export const CLEAR_MEMBER = 'CLEAR_MEMBER';
 export const SET_USERS = 'SET_USERS';
+export const SET_TRANSACTIONS = 'SET_TRANSACTIONS';
 
 //LABELS
 

@@ -8,10 +8,11 @@ import moment from 'moment';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import { useDispatch, useSelector } from "react-redux";
 import { insertDecimal } from "../../utils/helpers";
+import { getAllTransactions } from "../../redux/actions/Data";
 
 const Dashboard = () => {
   const dispatch = useDispatch()
-  let { members } = useSelector(({dataReducer}) => dataReducer);
+  let { members, totalMembershipFund, totalDirectReferral } = useSelector(({dataReducer}) => dataReducer);
   const [listData, setListData] = useState([]);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -24,12 +25,20 @@ const handleSort = () => {
   // setListData(newMembers)
 }
 
+const handleTransactions = () => {
+  dispatch(getAllTransactions())
+}
 
 
 useEffect(() => {
   handleSort();
+  handleTransactions()
 }, [members])
 
+  let memFund = (totalMembershipFund - (Math.floor((totalMembershipFund / 499)) * 499)) 
+
+  console.log(memFund / 499)
+  console.log(memFund)
 
   return (
     <Box m="20px">
@@ -54,10 +63,10 @@ useEffect(() => {
           justifyContent="center"
         >
           <StatBox
-            title="$0"
-            subtitle="Membership Fund"
-            progress="0.75"
-            increase="+14%"
+            title={`$${totalMembershipFund}`}
+            subtitle={<Box>Members Fund <strong>({members.length})</strong></Box>}
+            progress={memFund / 499}
+            increase={`${insertDecimal((memFund / 499) * 100)}%`}
             icon={
               <GroupAddIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
