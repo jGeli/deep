@@ -83,10 +83,10 @@ useEffect(() => {
           justifyContent="center"
         >
           <StatBox
-            title="$0"
+            title={`$${totalDirectReferral}`}
             subtitle="Direct Referral"
-            progress="0.80"
-            increase="+43%"
+            // progress="0.80"
+            // increase="+43%"
             icon={
               <Diversity3Icon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
