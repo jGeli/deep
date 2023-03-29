@@ -20,9 +20,23 @@ const Dashboard = () => {
 
 const handleSort = () => {
   let newMembers =  members;
-  // newMembers.sort((a, b) => a.createdAt - b.createdAt)
+  let mems = [];
+  let totalFund = totalMembershipFund + totalDirectReferral;
+  
+  
+  newMembers.sort((a, b) => a.createdAt - b.createdAt)
+  
+    newMembers.forEach(a => {
+      if(totalFund >= 500 && a.status !== 'activated'){
+        totalFund -= 500;
+        mems.push({...a, status: 'activated'});
+      } else {
+        mems.push(a)
+      }
+    })
+  
   console.log(newMembers)
-  // setListData(newMembers)
+  setListData(mems)
 }
 
 const handleTransactions = () => {
@@ -115,7 +129,7 @@ useEffect(() => {
               Recent Transactions
             </Typography>
           </Box>
-          {members.map((transaction, i) => (
+          {listData.map((transaction, i) => (
             <Box
               key={`${transaction.txId}-${i}`}
               display="flex"
