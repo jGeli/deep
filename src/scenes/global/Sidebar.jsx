@@ -167,13 +167,13 @@ const Sidebar = ({isCollapsed, setIsCollapsed, setSelected, selected}) => {
               selected={selected}
               setSelected={handleSelect}
             />
-              <Item
+              {/* <Item
               title="GENEALOGY"
               to="/genealogy"
               icon={<ForkRightIcon />}
               selected={selected}
               setSelected={handleSelect}
-            />
+            /> */}
               <Item
               title="Logout"
               to="/signin"
