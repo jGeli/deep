@@ -26,7 +26,6 @@ const handleSort = () => {
   
   
   newMembers.sort((a, b) => a.createdAt - b.createdAt)
-  
     newMembers.forEach(a => {
       if(totalFund >= 500 && a.status !== 'activated'){
         totalFund -= 500;
