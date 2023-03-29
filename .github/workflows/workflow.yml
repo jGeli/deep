@@ -37,7 +37,7 @@ jobs:
           password: 420230
           port: 22
           script: |
-              cd /media/bugtech/productions/www/deep
+              cd /media/bugtech/productions/www/geep/client
               git pull
               export NVM_DIR=~/.nvm
               source ~/.nvm/nvm.sh
